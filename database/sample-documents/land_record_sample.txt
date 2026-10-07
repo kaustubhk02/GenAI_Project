@@ -1,0 +1,7 @@
+*** SYNTHETIC SAMPLE DOCUMENT - FOR SOFTWARE TESTING ONLY - NOT A REAL LAND RECORD ***
+Document: Land Holding Record (Sample)
+Owner Name: Rajesh Patil
+Occupation: Farmer
+State: Maharashtra
+District: Pune
+Total Area: 1.5 Hectares

@@ -1,0 +1,99 @@
+[
+  {
+    "code": "DEMO-001",
+    "name": "DEMO: Small Farmer Income Support (Maharashtra)",
+    "description": "Fictional demo scheme mirroring the worked example in the roadmap. Not a real government scheme.",
+    "department": "Demo Department of Agriculture",
+    "benefitSummary": "Rs 6,000 per year direct benefit",
+    "benefitAmountPerYear": 6000,
+    "rules": { "all": [
+      { "field": "location.state", "operator": "=", "value": "Maharashtra", "label": "Resident of Maharashtra" },
+      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 2, "label": "Land holding of 2 hectares or less" },
+      { "field": "financial.annualIncome", "operator": "<=", "value": 200000, "label": "Annual income of Rs 2,00,000 or less" }
+    ] },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Roadmap worked example", "note": "DEMO DATA - replace with a verified official source and URL before real use." }
+  },
+  {
+    "code": "DEMO-002",
+    "name": "DEMO: Marginal Landholder Crop Support",
+    "description": "Fictional demo scheme for farmers with very small holdings.",
+    "department": "Demo Department of Agriculture",
+    "benefitSummary": "Rs 4,000 per year crop input support",
+    "benefitAmountPerYear": 4000,
+    "rules": { "all": [
+      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 1, "label": "Land holding of 1 hectare or less" },
+      { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is farmer or tenant farmer" }
+    ] },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+  },
+  {
+    "code": "DEMO-003",
+    "name": "DEMO: Women Farmers Training Grant",
+    "description": "Fictional demo scheme exercising gender, age range and state list rules.",
+    "department": "Demo Department of Rural Development",
+    "benefitSummary": "Rs 10,000 one-time training grant",
+    "benefitAmountPerYear": 10000,
+    "rules": { "all": [
+      { "field": "personal.gender", "operator": "=", "value": "FEMALE", "label": "Applicant is a woman" },
+      { "field": "personal.age", "operator": ">=", "value": 18, "label": "Aged 18 or above" },
+      { "field": "personal.age", "operator": "<=", "value": 60, "label": "Aged 60 or below" },
+      { "field": "location.state", "operator": "IN", "value": ["Maharashtra", "Karnataka", "Gujarat"], "label": "Resident of a participating state" }
+    ] },
+    "requiredDocuments": ["AADHAAR"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+  },
+  {
+    "code": "DEMO-004",
+    "name": "DEMO: SC/ST Farmer Irrigation Subsidy",
+    "description": "Fictional demo scheme exercising category rules.",
+    "department": "Demo Department of Water Resources",
+    "benefitSummary": "Rs 15,000 irrigation equipment subsidy",
+    "benefitAmountPerYear": 15000,
+    "rules": { "all": [
+      { "field": "social.category", "operator": "IN", "value": ["SC", "ST"], "label": "Belongs to SC or ST category" },
+      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 5, "label": "Land holding of 5 hectares or less" }
+    ] },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "INCOME_CERTIFICATE"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+  },
+  {
+    "code": "DEMO-005",
+    "name": "DEMO: Senior Farmer Pension",
+    "description": "Fictional demo scheme exercising age and income thresholds.",
+    "department": "Demo Department of Social Welfare",
+    "benefitSummary": "Rs 36,000 per year pension",
+    "benefitAmountPerYear": 36000,
+    "rules": { "all": [
+      { "field": "personal.age", "operator": ">=", "value": 60, "label": "Aged 60 or above" },
+      { "field": "financial.annualIncome", "operator": "<=", "value": 150000, "label": "Annual income of Rs 1,50,000 or less" }
+    ] },
+    "requiredDocuments": ["AADHAAR", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+  },
+  {
+    "code": "DEMO-006",
+    "name": "DEMO: Rural Livelihood Support (OR / NOT rules)",
+    "description": "Fictional demo scheme exercising OR and NOT logic.",
+    "department": "Demo Department of Rural Development",
+    "benefitSummary": "Rs 8,000 per year livelihood support",
+    "benefitAmountPerYear": 8000,
+    "rules": { "all": [
+      { "field": "financial.annualIncome", "operator": "<=", "value": 250000, "label": "Annual income of Rs 2,50,000 or less" },
+      { "any": [
+        { "field": "agriculture.occupation", "operator": "=", "value": "AGRICULTURAL_LABOURER", "label": "Works as an agricultural labourer" },
+        { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 0.5, "label": "Holds 0.5 hectare or less" }
+      ] },
+      { "not": { "field": "social.category", "operator": "=", "value": "GENERAL", "label": "Not in the General category" } }
+    ] },
+    "requiredDocuments": ["AADHAAR", "INCOME_CERTIFICATE"],
+    "officialApplicationUrl": "",
+    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+  }
+]

@@ -1,0 +1,7 @@
+*** SYNTHETIC SAMPLE DOCUMENT - FOR SOFTWARE TESTING ONLY - NOT A REAL CERTIFICATE ***
+Document: Income Certificate (Sample)
+Name: Rajesh Patil
+Annual Income: Rs. 1,80,000/-
+Category: OBC
+State: Maharashtra
+District: Pune

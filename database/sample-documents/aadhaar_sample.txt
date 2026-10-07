@@ -1,0 +1,7 @@
+*** SYNTHETIC SAMPLE DOCUMENT - FOR SOFTWARE TESTING ONLY - NOT A REAL IDENTITY DOCUMENT ***
+Document: Identity Card (Sample)
+Name: Rajesh Patil
+Date of Birth: 14/03/1984
+Gender: Male
+State: Maharashtra
+District: Pune
