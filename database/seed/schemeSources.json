@@ -1,0 +1,101 @@
+[
+  {
+    "schemeCode": "PM-KMY",
+    "schemeName": "Pradhan Mantri Kisan Maan-Dhan Yojana (PM-KMY)",
+    "sourceUrl": "https://pmkisan.gov.in/Documents/PM-KMY%20-%20FAQs.pdf",
+    "sourceType": "OFFICIAL_PDF",
+    "domain": "pmkisan.gov.in",
+    "authority": "Department of Agriculture & Farmers Welfare, Government of India",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "PM-KISAN",
+    "schemeName": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "sourceUrl": "https://pmkisan.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "pmkisan.gov.in",
+    "authority": "Department of Agriculture & Farmers Welfare, Government of India",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "PMFBY",
+    "schemeName": "Pradhan Mantri Fasal Bima Yojana (Crop Insurance Scheme)",
+    "sourceUrl": "https://pmfby.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "pmfby.gov.in",
+    "authority": "Department of Agriculture & Farmers Welfare, Government of India",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "KCC",
+    "schemeName": "Kisan Credit Card (KCC) Scheme & Modified Interest Subvention (MISS)",
+    "sourceUrl": "https://www.nabard.org/content1.aspx?id=599",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "nabard.org",
+    "authority": "National Bank for Agriculture and Rural Development (NABARD) / RBI",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "PMKSY-PDMC",
+    "schemeName": "Pradhan Mantri Krishi Sinchayee Yojana - Per Drop More Crop (Micro Irrigation)",
+    "sourceUrl": "https://pmksy.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "pmksy.gov.in",
+    "authority": "Department of Agriculture & Farmers Welfare, Government of India",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "SMAM",
+    "schemeName": "Sub-Mission on Agricultural Mechanization (SMAM - Farm Equipment Subsidy)",
+    "sourceUrl": "https://agrimachinery.nic.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "agrimachinery.nic.in",
+    "authority": "Mechanization & Technology Division, Ministry of Agriculture & Farmers Welfare",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "PKVY",
+    "schemeName": "Paramparagat Krishi Vikas Yojana (PKVY - Traditional Organic Agriculture)",
+    "sourceUrl": "https://pgsindia-ncof.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "pgsindia-ncof.gov.in",
+    "authority": "National Centre for Organic and Natural Farming, Government of India",
+    "classification": "CENTRAL",
+    "stateApplicability": "ALL",
+    "enabled": true
+  },
+  {
+    "schemeCode": "NSMY",
+    "schemeName": "Namo Shetkari Mahasanman Nidhi Yojana (Government of Maharashtra)",
+    "sourceUrl": "https://krishi.maharashtra.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "krishi.maharashtra.gov.in",
+    "authority": "Department of Agriculture, Government of Maharashtra",
+    "classification": "STATE",
+    "stateApplicability": "Maharashtra",
+    "enabled": true
+  },
+  {
+    "schemeCode": "MTS-MAHA",
+    "schemeName": "Magel Tyala Shettale (Farm Pond on Demand Scheme - Maharashtra)",
+    "sourceUrl": "https://mahadbt.maharashtra.gov.in/",
+    "sourceType": "OFFICIAL_PORTAL",
+    "domain": "mahadbt.maharashtra.gov.in",
+    "authority": "Agriculture Department, MahaDBT Portal, Government of Maharashtra",
+    "classification": "STATE",
+    "stateApplicability": "Maharashtra",
+    "enabled": true
+  }
+]

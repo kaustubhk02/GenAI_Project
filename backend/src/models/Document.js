@@ -13,6 +13,12 @@ const documentSchema = new mongoose.Schema({
   verified: { type: Boolean, default: false }, // only a real DigiLocker issued document may ever set this true
   rawText: String,
   extractedData: { type: mongoose.Schema.Types.Mixed, default: {} },
+  /** Per-field extraction status: "extracted" | "null" */
+  fieldStatus: { type: mongoose.Schema.Types.Mixed, default: {} },
+  /** OCR metadata: language, confidence, method */
+  ocrMeta: { type: mongoose.Schema.Types.Mixed, default: {} },
+  /** Whether extraction was done by "llm" or "regex" */
+  extractionMethod: { type: String, enum: ['llm', 'regex', null], default: null },
   warnings: [String],
   status: { type: String, enum: ['PENDING_REVIEW', 'CONFIRMED'], default: 'PENDING_REVIEW' },
 }, { timestamps: true });

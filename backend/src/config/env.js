@@ -8,6 +8,10 @@ for (const key of ['MONGODB_URI', 'JWT_SECRET']) {
   }
 }
 
+if (!process.env.GEMINI_API_KEY) {
+  console.warn('[env] GEMINI_API_KEY is not set. Document extraction will fall back to regex-only mode.');
+}
+
 module.exports = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 5000,
@@ -19,4 +23,8 @@ module.exports = {
   uploadDir: path.resolve(__dirname, '../..', process.env.UPLOAD_DIR || 'uploads'),
   maxUploadMb: Number(process.env.MAX_UPLOAD_MB) || 5,
   allowTextUploads: (process.env.ALLOW_TEXT_UPLOADS || 'true') === 'true',
+  geminiApiKey: process.env.GEMINI_API_KEY || null,
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-3.5-flash',
+  enableSchemeSync: (process.env.ENABLE_SCHEME_SYNC || 'true') === 'true',
+  schemeSyncCron: process.env.SCHEME_SYNC_CRON || '0 2 * * *',
 };

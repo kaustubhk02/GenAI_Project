@@ -24,6 +24,7 @@ app.use('/api/profile', require('./routes/profile'));
 app.use('/api/documents', require('./routes/documents'));
 app.use('/api/recommendations', require('./routes/recommendations'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/schemes', require('./routes/schemes'));
 
 app.use(notFound);
 app.use(errorHandler);

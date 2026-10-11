@@ -17,7 +17,7 @@ const STATUS = {
   ALMOST_ELIGIBLE: 'ALMOST_ELIGIBLE',
 };
 const STATUS_RANK = { NOT_ELIGIBLE: 0, INCOMPLETE: 1, ALMOST_ELIGIBLE: 2, ELIGIBLE: 3 };
-const OPERATORS = ['=', '!=', '>', '<', '>=', '<=', 'IN'];
+const OPERATORS = ['=', '==', '===', '!=', '!==', '>', '<', '>=', '<=', 'IN'];
 
 function getByPath(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);
@@ -31,8 +31,13 @@ const norm = (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v);
 
 function compare(operator, actual, expected) {
   switch (operator) {
-    case '=': return norm(actual) === norm(expected);
-    case '!=': return norm(actual) !== norm(expected);
+    case '=':
+    case '==':
+    case '===':
+      return norm(actual) === norm(expected);
+    case '!=':
+    case '!==':
+      return norm(actual) !== norm(expected);
     case '>': return Number(actual) > Number(expected);
     case '<': return Number(actual) < Number(expected);
     case '>=': return Number(actual) >= Number(expected);

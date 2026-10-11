@@ -42,3 +42,25 @@ button.link { background: none; border: 0; color: var(--leaf-dark); text-decorat
 .raw { background: #f3f0e2; padding: .7rem; overflow: auto; font-size: .8rem; border-radius: 4px; }
 .auth { max-width: 380px; margin: 4rem auto; padding: 0 1rem; }
 @media (prefers-reduced-motion: no-preference) { .bar div { transition: width .4s ease; } }
+
+/* ── Extraction badges ──────────────────────────────────────────────────────── */
+.field-label-row { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.extraction-badge { font-size: .7rem; font-weight: 700; border-radius: 3px; padding: .1rem .4rem; white-space: nowrap; }
+.extraction-badge.extracted { background: #e6f0e1; color: #2c4f29; border: 1px solid #b7d3ae; }
+.extraction-badge.not-found  { background: #f7ecd2; color: #9a6a12; border: 1px solid #e3cf9b; }
+/* Subtly highlight auto-filled labels */
+label.field-extracted { color: var(--ink); }
+label.field-extracted input, label.field-extracted select { border-color: #8fb98a; background: #f5fbf4; }
+/* Full-width label for income-records */
+label.field-full { display: grid; gap: .35rem; font-size: .9rem; color: var(--muted); grid-column: 1 / -1; }
+
+/* ── Income records table ───────────────────────────────────────────────────── */
+.income-records-table { border-collapse: collapse; width: 100%; font-size: .85rem; margin: .3rem 0; }
+.income-records-table th, .income-records-table td { border: 1px solid var(--line); padding: .3rem .6rem; text-align: left; }
+.income-records-table th { background: #f3f0e2; font-weight: 600; color: var(--ink); }
+.income-records-table tr:nth-child(even) td { background: #faf8f0; }
+
+/* ── Extraction summary bar ─────────────────────────────────────────────────── */
+.extraction-summary { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0 .6rem; }
+.extraction-meta { font-size: .78rem; background: #eef4fc; color: var(--blue); border: 1px solid #bdd4e6; border-radius: 3px; padding: .15rem .5rem; }
+

@@ -10,7 +10,7 @@ const requireAuth = require('../middleware/auth');
 const validate = require('../middleware/validate');
 const asyncHandler = require('../middleware/asyncHandler');
 const HttpError = require('../middleware/httpError');
-const { readDocumentText } = require('../services/ocrClient');
+const { readDocument } = require('../services/ocrClient');
 const { extractFields } = require('../services/extractionService');
 const { applyToProfile } = require('../services/profileMerge');
 const { reevaluate } = require('../services/reevaluate');
@@ -51,7 +51,7 @@ function signatureMatches(filePath, mime) {
   return false;
 }
 
-const removeFile = (p) => fs.promises.unlink(p).catch(() => {});
+const removeFile = (p) => fs.promises.unlink(p).catch(() => { });
 const publicDoc = (doc) => {
   const o = doc.toObject ? doc.toObject() : doc;
   delete o.filePath;
@@ -73,10 +73,32 @@ router.post('/upload', upload.single('file'), asyncHandler(async (req, res) => {
 
   let rawText = '';
   let extractedData = {};
+  let fieldStatus = {};
+  let ocrMeta = {};
+  let extractionMethod = null;
   let warnings = [];
+
   try {
-    rawText = await readDocumentText(req.file.path, req.file.mimetype, req.file.originalname);
-    ({ data: extractedData, warnings } = extractFields(rawText, documentType));
+    // ── OCR ──────────────────────────────────────────────────────────────────
+    const ocrResult = await readDocument(req.file.path, req.file.mimetype, req.file.originalname);
+    rawText = ocrResult.text;
+    ocrMeta = {
+      language: ocrResult.language,
+      confidence: ocrResult.confidence,
+      method: ocrResult.method,
+    };
+
+    // ── Field extraction (LLM → regex fallback) ───────────────────────────────
+    const extracted = await extractFields(rawText, documentType);
+    extractedData = extracted.data;
+    fieldStatus = extracted.fieldStatus;
+    warnings = extracted.warnings;
+    extractionMethod = extracted.extractionMethod;
+
+    console.info(
+      `[upload] ${req.file.originalname} | OCR: ${ocrMeta.language} | ` +
+      `extraction: ${extractionMethod} | fields found: ${Object.keys(extractedData).join(', ')}`
+    );
   } catch (err) {
     console.warn('Extraction failed:', err.message);
     warnings = [`Automatic reading failed: ${err.message}. You can still enter the values manually below.`];
@@ -94,6 +116,9 @@ router.post('/upload', upload.single('file'), asyncHandler(async (req, res) => {
     verified: false,
     rawText,
     extractedData,
+    fieldStatus,
+    ocrMeta,
+    extractionMethod,
     warnings,
   });
   await reevaluate(req.user.id);
@@ -111,12 +136,31 @@ const confirmSchema = Joi.object({
   gender: Joi.string().valid(...GENDERS),
   state: Joi.string().valid(...INDIAN_STATES),
   district: Joi.string().trim().max(100),
+  taluka: Joi.string().trim().max(100).allow(''),
+  village: Joi.string().trim().max(100).allow(''),
   landAreaHectares: Joi.number().greater(0).max(100000),
   occupation: Joi.string().valid(...OCCUPATIONS),
   annualIncome: Joi.number().min(0),
   category: Joi.string().valid(...CATEGORIES),
   bankName: Joi.string().trim().max(100),
+  hasDisability: Joi.boolean(),
+  disabilityPercentage: Joi.number().min(0).max(100),
+  incomeRecords: Joi.array().items(Joi.object({
+    financialYear: Joi.string().trim(),
+    annualIncome: Joi.number()
+  }))
 });
+
+router.get('/:id/file', asyncHandler(async (req, res) => {
+  const doc = await Document.findOne({ _id: req.params.id, user: req.user.id });
+  if (!doc || !doc.filePath || !fs.existsSync(doc.filePath)) {
+    throw new HttpError(404, 'Document file not found on server');
+  }
+  res.setHeader('Content-Type', doc.mimeType || 'application/octet-stream');
+  res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(doc.originalName || 'document')}"`);
+  const stream = fs.createReadStream(doc.filePath);
+  stream.pipe(res);
+}));
 
 router.post('/:id/confirm', validate(confirmSchema), asyncHandler(async (req, res) => {
   const doc = await Document.findOne({ _id: req.params.id, user: req.user.id });

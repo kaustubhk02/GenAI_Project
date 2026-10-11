@@ -1,9 +1,22 @@
 /**
- * Rule/regex based structured extraction: raw OCR text -> typed, validated fields.
- * (LLM-assisted extraction for messy text is a later roadmap step; it would plug in here
- * and its output would still pass through the same validation.)
+ * Document field extraction pipeline.
+ *
+ * Strategy:
+ *   1. Try LLM extraction (Gemini) → handles Marathi/Hindi/English text natively.
+ *   2. If LLM unavailable or fails → fall back to legacy regex-based extraction.
+ *
+ * The caller (documents route) always receives:
+ *   { data, fieldStatus, warnings }
+ *
+ * fieldStatus is a map of fieldKey → "extracted" | "null"
+ * so the frontend can visually distinguish auto-filled fields from empty ones.
  */
+
+const { extractWithLLM } = require('./llmExtractionService');
 const { INDIAN_STATES, CATEGORIES, ALLOWED_FIELDS } = require('../constants');
+const env = require('../config/env');
+
+// ─── Legacy regex helpers (fallback only) ────────────────────────────────────
 
 function field(text, labels) {
   const re = new RegExp(`^\\s*(?:${labels})\\s*[:\\-]\\s*(.+?)\\s*$`, 'im');
@@ -25,11 +38,11 @@ function parseArea(raw) {
 }
 
 function parseAge(text, now = new Date()) {
-  const direct = field(text, 'Age');
+  const direct = field(text, 'Age|वये|वय|Age/वय');
   if (direct && /^\d{1,3}/.test(direct)) return parseInt(direct, 10);
-  const dob = field(text, 'Date of Birth|DOB');
+  const dob = field(text, 'Date of Birth|DOB|जन्म तारीख|जन्म तिथी|DOB/जन्म तारीख');
   if (dob) {
-    const m = dob.match(/(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})/);
+    const m = dob.match(/(\d{1,2})[/\-.]\s*(\d{1,2})[/\-.]\s*(\d{4})/);
     if (m) {
       const [d, mo, y] = [Number(m[1]), Number(m[2]), Number(m[3])];
       let age = now.getFullYear() - y;
@@ -42,7 +55,8 @@ function parseAge(text, now = new Date()) {
   return undefined;
 }
 
-const canonicalState = (raw) => (raw ? INDIAN_STATES.find((s) => s.toLowerCase() === raw.trim().toLowerCase()) : undefined);
+const canonicalState = (raw) =>
+  raw ? INDIAN_STATES.find((s) => s.toLowerCase() === raw.trim().toLowerCase()) : undefined;
 
 function parseGender(raw) {
   if (!raw) return undefined;
@@ -67,13 +81,13 @@ function parseCategory(raw) {
   return CATEGORIES.find((c) => r === c || r.startsWith(`${c} `) || r.startsWith(`${c}(`));
 }
 
-function extractFields(rawText, documentType, now = new Date()) {
+function legacyExtract(rawText, documentType, now = new Date()) {
   const text = (rawText || '').replace(/\r/g, '');
   const stateRaw = field(text, 'State');
   const candidates = {
-    name: field(text, 'Account Holder Name|Account Holder|Owner Name|Applicant Name|Holder Name|Name'),
+    name: field(text, 'Account Holder Name|Account Holder|Owner Name|Applicant Name|Holder Name|Name|नाव|Name/नाव|Full Name'),
     age: parseAge(text, now),
-    gender: parseGender(field(text, 'Gender|Sex')),
+    gender: parseGender(field(text, 'Gender|Sex|लिंग|Gender/लिंग')),
     state: canonicalState(stateRaw),
     district: field(text, 'District'),
     landAreaHectares: parseArea(field(text, 'Total Area|Land Area|Area')),
@@ -83,22 +97,89 @@ function extractFields(rawText, documentType, now = new Date()) {
     bankName: field(text, 'Bank Name'),
   };
 
+  const allowed = ALLOWED_FIELDS[documentType] || [];
   const data = {};
+  const fieldStatus = {};
   const warnings = [];
-  for (const key of ALLOWED_FIELDS[documentType] || []) {
+
+  for (const key of allowed) {
     const v = candidates[key];
-    if (v === undefined || v === '' || (typeof v === 'number' && !Number.isFinite(v))) {
-      warnings.push(key === 'state' && stateRaw
-        ? `State "${stateRaw}" is not a recognised state name - please select it manually.`
-        : `Could not find "${key}" in the document - please enter it manually.`);
-      continue;
+    const invalid =
+      v === undefined || v === '' ||
+      (typeof v === 'number' && !Number.isFinite(v)) ||
+      (key === 'annualIncome' && v < 0) ||
+      (key === 'landAreaHectares' && v <= 0) ||
+      (key === 'age' && (v < 0 || v > 120));
+
+    if (invalid) {
+      fieldStatus[key] = 'null';
+      warnings.push(
+        key === 'state' && stateRaw
+          ? `State "${stateRaw}" is not a recognised state name - please select it manually.`
+          : `Could not find "${key}" in the document - please enter it manually.`,
+      );
+    } else {
+      data[key] = v;
+      fieldStatus[key] = 'extracted';
     }
-    if (key === 'annualIncome' && v < 0) { warnings.push('Income looked invalid and was ignored.'); continue; }
-    if (key === 'landAreaHectares' && v <= 0) { warnings.push('Land area looked invalid and was ignored.'); continue; }
-    if (key === 'age' && (v < 0 || v > 120)) { warnings.push('Age looked invalid and was ignored.'); continue; }
-    data[key] = v;
   }
-  return { data, warnings };
+
+  return { data, fieldStatus, warnings };
+}
+
+// ─── Main export ──────────────────────────────────────────────────────────────
+
+/**
+ * Extract fields from OCR text.
+ * Tries LLM first (if GEMINI_API_KEY is configured), falls back to regex.
+ *
+ * Returns: { data, fieldStatus, warnings, extractionMethod }
+ *   extractionMethod: "llm" | "regex"
+ */
+async function extractFields(rawText, documentType, now = new Date()) {
+  const allowed = ALLOWED_FIELDS[documentType] || [];
+
+  // ── LLM path ────────────────────────────────────────────────────────────────
+  // Skip live LLM network calls during unit testing to avoid exhausting free-tier rate limits
+  if (env.geminiApiKey && process.env.NODE_ENV !== 'test') {
+    try {
+      const { data: llmData, fieldStatus: llmStatus, warnings: llmWarnings } =
+        await extractWithLLM(rawText, documentType);
+
+      // Keep only allowed fields (drop any the LLM added speculatively)
+      const data = {};
+      const fieldStatus = {};
+      for (const key of allowed) {
+        if (llmData[key] !== undefined) {
+          data[key] = llmData[key];
+        }
+        fieldStatus[key] = llmStatus[key] || 'null';
+      }
+      // incomeRecords is special – allowed for INCOME_CERTIFICATE beyond the base set
+      if (documentType === 'INCOME_CERTIFICATE' && llmData.incomeRecords) {
+        data.incomeRecords = llmData.incomeRecords;
+        fieldStatus.incomeRecords = llmStatus.incomeRecords || 'null';
+      }
+
+      const nullFields = allowed.filter((k) => fieldStatus[k] === 'null');
+      const nullWarnings = nullFields.map((k) =>
+        `"${k}" was not found in the document – please enter it manually.`,
+      );
+
+      return {
+        data,
+        fieldStatus,
+        warnings: [...llmWarnings, ...nullWarnings],
+        extractionMethod: 'llm',
+      };
+    } catch (err) {
+      console.warn('[extractFields] LLM extraction failed, falling back to regex:', err.message);
+    }
+  }
+
+  // ── Regex fallback ───────────────────────────────────────────────────────────
+  const result = legacyExtract(rawText, documentType, now);
+  return { ...result, extractionMethod: 'regex' };
 }
 
 module.exports = { extractFields };

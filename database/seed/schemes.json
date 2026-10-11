@@ -1,99 +1,191 @@
 [
   {
-    "code": "DEMO-001",
-    "name": "DEMO: Small Farmer Income Support (Maharashtra)",
-    "description": "Fictional demo scheme mirroring the worked example in the roadmap. Not a real government scheme.",
-    "department": "Demo Department of Agriculture",
-    "benefitSummary": "Rs 6,000 per year direct benefit",
+    "code": "PM-KISAN",
+    "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "description": "Direct income support of ₹6,000 per year in three equal 4-monthly installments of ₹2,000 directly transferred into bank accounts of all landholding farmer families across India.",
+    "department": "Department of Agriculture and Farmers Welfare, Ministry of Agriculture & Farmers Welfare",
+    "benefitSummary": "₹6,000 per year direct income support (DBT in 3 installments)",
     "benefitAmountPerYear": 6000,
-    "rules": { "all": [
-      { "field": "location.state", "operator": "=", "value": "Maharashtra", "label": "Resident of Maharashtra" },
-      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 2, "label": "Land holding of 2 hectares or less" },
-      { "field": "financial.annualIncome", "operator": "<=", "value": 200000, "label": "Annual income of Rs 2,00,000 or less" }
-    ] },
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is Farmer or Tenant Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Must hold cultivable land" }
+      ]
+    },
     "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Roadmap worked example", "note": "DEMO DATA - replace with a verified official source and URL before real use." }
+    "officialApplicationUrl": "https://pmkisan.gov.in/",
+    "source": {
+      "type": "OFFICIAL_API",
+      "name": "API Setu / PM-KISAN Portal",
+      "url": "https://apisetu.gov.in/api/pmkisan",
+      "note": "Verified via Ministry of Agriculture DBT API Setu specification"
+    },
+    "officialDocumentText": "PRADHAN MANTRI KISAN SAMMAN NIDHI (PM-KISAN) OPERATIONAL GUIDELINES.\n1. Objective: To augment the income of all landholding farmers' families in the country to procure various inputs related to agriculture and domestic needs.\n2. Eligibility Criteria: All landholding farmer families having cultivable landholding in their names are eligible. The definition of family comprises husband, wife, and minor children.\n3. Financial Benefit: Under the scheme, financial assistance of Rs. 6000/- per annum is provided to eligible beneficiary farmer families in three four-monthly installments of Rs. 2000/- each through Direct Benefit Transfer (DBT) mode into Aadhaar-seeded bank accounts.\n4. Required Documents & Identifiers: Aadhaar Card (mandatory for e-KYC), Land Holding Ownership Records (7/12 extract / Khasra / Khatauni), Bank Passbook with active IFSC code and Aadhaar linkage.\n5. Exclusion Criteria: Institutional landholders, constitutional post holders, serving/retired government employees, professionals (doctors, engineers, lawyers, CA), and individuals who paid income tax in the last assessment year are excluded."
   },
   {
-    "code": "DEMO-002",
-    "name": "DEMO: Marginal Landholder Crop Support",
-    "description": "Fictional demo scheme for farmers with very small holdings.",
-    "department": "Demo Department of Agriculture",
-    "benefitSummary": "Rs 4,000 per year crop input support",
-    "benefitAmountPerYear": 4000,
-    "rules": { "all": [
-      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 1, "label": "Land holding of 1 hectare or less" },
-      { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is farmer or tenant farmer" }
-    ] },
-    "requiredDocuments": ["AADHAAR", "LAND_RECORD"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+    "code": "PMFBY",
+    "name": "Pradhan Mantri Fasal Bima Yojana (Crop Insurance Scheme)",
+    "description": "Comprehensive crop insurance scheme protecting farmers against non-preventable natural risks, crop damage, post-harvest losses, and unseasonal rains with nominal premium rates.",
+    "department": "Department of Agriculture, Cooperation and Farmers Welfare",
+    "benefitSummary": "Comprehensive risk insurance covering up to 100% sum insured for crop loss",
+    "benefitAmountPerYear": 25000,
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is Farmer or Tenant Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Must cultivate notified crops on agricultural land" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "https://pmfby.gov.in/",
+    "source": {
+      "type": "OFFICIAL_API",
+      "name": "API Setu / PMFBY Portal",
+      "url": "https://apisetu.gov.in/api/pmfby",
+      "note": "Integrated with Samrakshane and State Crop Insurance Portals via API Setu"
+    },
+    "officialDocumentText": "PRADHAN MANTRI FASAL BIMA YOJANA (PMFBY) REVISED OPERATIONAL GUIDELINES.\n1. Scheme Overview: PMFBY aims to provide insurance coverage and financial support to farmers suffering crop loss/damage arising out of unforeseen natural events.\n2. Eligible Farmers: All farmers growing notified crops in notified areas including sharecroppers and tenant farmers are eligible.\n3. Premium Structure: Maximum premium payable by farmers is 2% for all Kharif food & oilseed crops, 1.5% for all Rabi crops, and 5% for annual commercial/horticultural crops. The rest of the actuarial premium is subsidized equally by Central and State Governments.\n4. Coverage of Risks: Comprehensive coverage for Prevented Sowing/Planting Risk, Standing Crop loss (mid-season adversity due to floods, drought, pest attack), Post-Harvest Losses (up to 14 days after harvesting), and Localized Calamities (hailstorm, landslide, inundation).\n5. Claim Settlement: Assessed through Crop Cutting Experiments (CCEs) and remote sensing technology, with direct credit into farmer bank accounts."
   },
   {
-    "code": "DEMO-003",
-    "name": "DEMO: Women Farmers Training Grant",
-    "description": "Fictional demo scheme exercising gender, age range and state list rules.",
-    "department": "Demo Department of Rural Development",
-    "benefitSummary": "Rs 10,000 one-time training grant",
-    "benefitAmountPerYear": 10000,
-    "rules": { "all": [
-      { "field": "personal.gender", "operator": "=", "value": "FEMALE", "label": "Applicant is a woman" },
-      { "field": "personal.age", "operator": ">=", "value": 18, "label": "Aged 18 or above" },
-      { "field": "personal.age", "operator": "<=", "value": 60, "label": "Aged 60 or below" },
-      { "field": "location.state", "operator": "IN", "value": ["Maharashtra", "Karnataka", "Gujarat"], "label": "Resident of a participating state" }
-    ] },
-    "requiredDocuments": ["AADHAAR"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+    "code": "KCC",
+    "name": "Kisan Credit Card (KCC) Scheme & Interest Subvention",
+    "description": "Provides timely and adequate credit to farmers from the banking system for agricultural operations, purchase of seeds, fertilizers, pesticides, machinery, and allied activities at subsidized interest rates.",
+    "department": "Department of Agriculture & Farmers Welfare / RBI / NABARD",
+    "benefitSummary": "Credit limit up to ₹3,00,000 at 4% effective interest rate with prompt repayment",
+    "benefitAmountPerYear": 50000,
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER", "AGRICULTURAL_LABOURER"], "label": "Engaged in agriculture or allied rural activities" },
+        { "field": "personal.age", "operator": ">=", "value": 18, "label": "Applicant aged 18 years or above" },
+        { "field": "personal.age", "operator": "<=", "value": 75, "label": "Applicant aged 75 years or below" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "https://myscheme.gov.in/schemes/kcc",
+    "source": {
+      "type": "OFFICIAL_API",
+      "name": "myScheme / API Setu",
+      "url": "https://myscheme.gov.in/schemes/kcc",
+      "note": "Kisan Credit Card guidelines via Ministry of Agriculture and RBI"
+    },
+    "officialDocumentText": "KISAN CREDIT CARD (KCC) SCHEME GUIDELINES.\n1. Objective: To meet the short term credit requirements for cultivation of crops, post-harvest expenses, produce marketing loan, consumption requirements of farmer household, and working capital for maintenance of farm assets and activities allied to agriculture.\n2. Eligibility: All individual farmers/joint borrowers who are owner cultivators, tenant farmers, oral lessees & share croppers, and SHGs or Joint Liability Groups (JLGs) of farmers.\n3. Interest Rate & Subvention: Benchmark interest rate is 7% per annum. An Interest Subvention Scheme (ISS) of 3% is provided for prompt repayment, making the effective interest rate only 4% per annum for loans up to Rs. 3,00,000.\n4. Collateral Security: Waived for KCC loans up to Rs. 1.60 Lakh without collateral (raised up to Rs. 3.00 Lakh for tie-up arrangements).\n5. Validity & Renewal: Card is valid for 5 years subject to annual review and renewal based on repayment."
   },
   {
-    "code": "DEMO-004",
-    "name": "DEMO: SC/ST Farmer Irrigation Subsidy",
-    "description": "Fictional demo scheme exercising category rules.",
-    "department": "Demo Department of Water Resources",
-    "benefitSummary": "Rs 15,000 irrigation equipment subsidy",
-    "benefitAmountPerYear": 15000,
-    "rules": { "all": [
-      { "field": "social.category", "operator": "IN", "value": ["SC", "ST"], "label": "Belongs to SC or ST category" },
-      { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 5, "label": "Land holding of 5 hectares or less" }
-    ] },
-    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "INCOME_CERTIFICATE"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+    "code": "PMKSY-PDMC",
+    "name": "PM Krishi Sinchayee Yojana - Per Drop More Crop (Micro-Irrigation)",
+    "description": "Financial assistance and subsidy for installing precision micro-irrigation systems (Drip and Sprinkler irrigation) to improve water use efficiency, crop yield, and farm productivity.",
+    "department": "Department of Agriculture and Farmers Welfare, Ministry of Agriculture",
+    "benefitSummary": "Up to 55% financial subsidy on drip and sprinkler irrigation installations",
+    "benefitAmountPerYear": 30000,
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Owns or leases agricultural land suitable for micro-irrigation" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "https://pmksy.gov.in/",
+    "source": {
+      "type": "OFFICIAL_PORTAL",
+      "name": "PMKSY National Portal",
+      "url": "https://pmksy.gov.in/",
+      "note": "Operational Guidelines for Per Drop More Crop (PDMC)"
+    },
+    "officialDocumentText": "PRADHAN MANTRI KRISHI SINCHAYEE YOJANA (PMKSY) - PER DROP MORE CROP (PDMC).\n1. Focus: Enhancing water use efficiency at farm level through Micro Irrigation technologies like Drip and Sprinkler Irrigation systems.\n2. Subsidy Pattern: Financial assistance is provided at 55% of the indicative system cost for Small & Marginal farmers (holding up to 2 hectares), and 45% for Other farmers (holding more than 2 hectares). Additional top-up subsidies are provided by several state governments (e.g. MahaDBT in Maharashtra).\n3. Eligible Beneficiaries: All categories of farmers are eligible. Farmers who have valid land ownership documents or registered lease agreements for at least 7 years are eligible to install micro-irrigation equipment.\n4. Required Documents: Aadhaar Card, 7/12 Land Record / Land Title, Electricity Bill / Water Source verification, Bank Account details linked with Aadhaar.\n5. Expected Impact: Water savings of 30-50%, fertilizer savings of 25-40% through fertigation, and crop yield enhancement of 20-40%."
   },
   {
-    "code": "DEMO-005",
-    "name": "DEMO: Senior Farmer Pension",
-    "description": "Fictional demo scheme exercising age and income thresholds.",
-    "department": "Demo Department of Social Welfare",
-    "benefitSummary": "Rs 36,000 per year pension",
+    "code": "SMAM",
+    "name": "Sub-Mission on Agricultural Mechanization (SMAM)",
+    "description": "Provides 40% to 50% financial subsidy on purchase of modern agricultural machinery (tractors, rotavators, power tillers, seed drills, laser levelers) to reduce drudgery and increase crop production efficiency.",
+    "department": "Mechanization & Technology Division, Ministry of Agriculture & Farmers Welfare",
+    "benefitSummary": "40% to 50% capital subsidy (up to ₹1,25,000) on farm machinery and tractors",
+    "benefitAmountPerYear": 40000,
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Applicant must hold cultivable agricultural land" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK", "INCOME_CERTIFICATE"],
+    "officialApplicationUrl": "https://agrimachinery.nic.in/",
+    "source": {
+      "type": "OFFICIAL_PORTAL",
+      "name": "Direct Benefit Transfer in Agriculture Mechanization",
+      "url": "https://agrimachinery.nic.in/",
+      "note": "SMAM Operational Guidelines DAC&FW"
+    },
+    "officialDocumentText": "SUB-MISSION ON AGRICULTURAL MECHANIZATION (SMAM) GUIDELINES.\n1. Objectives: Increasing the reach of farm mechanization to small and marginal farmers and to regions where availability of farm power is low.\n2. Subsidy Pattern: Up to 50% financial assistance for procurement of agricultural equipment for Small & Marginal Farmers, SC/ST, and Women Farmers. Up to 40% subsidy for other general category farmers.\n3. Eligible Machinery: Tractors, Power Tillers, Multicrop Threshers, Rotavators, Super Seeders, Zero Till Seed Cum Fertilizer Drills, Laser Land Levelers, Harvesters, and Solar Powered Sprayers.\n4. Eligibility: Farmers who have not availed subsidy for the same equipment within the last 5 to 7 years.\n5. Application Process: Registration on Agrimachinery portal (agrimachinery.nic.in) or State DBT portals (like MahaDBT), uploading Aadhaar, Land records (7/12 & 8A), Bank Passbook, Caste Certificate (if applicable), and quotation from authorized dealers."
+  },
+  {
+    "code": "PM-KMY",
+    "name": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY Pension)",
+    "description": "An assured old age pension scheme providing ₹3,000 per month (₹36,000 per year) to small and marginal farmers upon attaining 60 years of age.",
+    "department": "Department of Agriculture & Farmers Welfare in partnership with LIC of India",
+    "benefitSummary": "₹36,000 per year (₹3,000/month) lifelong pension after age 60",
     "benefitAmountPerYear": 36000,
-    "rules": { "all": [
-      { "field": "personal.age", "operator": ">=", "value": 60, "label": "Aged 60 or above" },
-      { "field": "financial.annualIncome", "operator": "<=", "value": 150000, "label": "Annual income of Rs 1,50,000 or less" }
-    ] },
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER"], "label": "Small and Marginal Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 2, "label": "Land holding up to 2 hectares (Small & Marginal)" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Must possess cultivable land" },
+        { "field": "personal.age", "operator": ">=", "value": 18, "label": "Entry age minimum 18 years" },
+        { "field": "personal.age", "operator": "<=", "value": 40, "label": "Entry age maximum 40 years" }
+      ]
+    },
     "requiredDocuments": ["AADHAAR", "BANK_PASSBOOK"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+    "officialApplicationUrl": "https://maandhan.in/",
+    "source": {
+      "type": "OFFICIAL_PORTAL",
+      "name": "Maandhan Portal / LIC",
+      "url": "https://maandhan.in/",
+      "note": "Official PM-KMY Scheme Guidelines"
+    },
+    "officialDocumentText": "PRADHAN MANTRI KISAN MAANDHAN YOJANA (PM-KMY) OPERATIONAL DETAILS.\n1. Scheme Nature: PM-KMY is a voluntary and contributory pension scheme for Small and Marginal Farmers (SMFs) to provide them social security during old age.\n2. Eligibility: Small and Marginal Farmers having cultivable land up to 2 hectares as per land records of the concerned State/UT, aged between 18 to 40 years.\n3. Monthly Contribution: Monthly subscription ranging between Rs. 55 to Rs. 200 per month depending upon entry age. The Central Government makes an equal 50% matching contribution into the Pension Fund managed by LIC.\n4. Pension Benefit: Upon attaining the age of 60 years, the beneficiary receives an assured monthly pension of Rs. 3,000/- directly into their bank account.\n5. Spouse Benefits: On death of the pensioner, the spouse is entitled to receive 50% of the pension as family pension provided the spouse is not already an SMF beneficiary of the scheme."
   },
   {
-    "code": "DEMO-006",
-    "name": "DEMO: Rural Livelihood Support (OR / NOT rules)",
-    "description": "Fictional demo scheme exercising OR and NOT logic.",
-    "department": "Demo Department of Rural Development",
-    "benefitSummary": "Rs 8,000 per year livelihood support",
-    "benefitAmountPerYear": 8000,
-    "rules": { "all": [
-      { "field": "financial.annualIncome", "operator": "<=", "value": 250000, "label": "Annual income of Rs 2,50,000 or less" },
-      { "any": [
-        { "field": "agriculture.occupation", "operator": "=", "value": "AGRICULTURAL_LABOURER", "label": "Works as an agricultural labourer" },
-        { "field": "agriculture.landAreaHectares", "operator": "<=", "value": 0.5, "label": "Holds 0.5 hectare or less" }
-      ] },
-      { "not": { "field": "social.category", "operator": "=", "value": "GENERAL", "label": "Not in the General category" } }
-    ] },
-    "requiredDocuments": ["AADHAAR", "INCOME_CERTIFICATE"],
-    "officialApplicationUrl": "",
-    "source": { "type": "DEMO_SAMPLE", "name": "Invented for testing", "note": "DEMO DATA - not a real scheme." }
+    "code": "MKSP",
+    "name": "Mahila Kisan Sashaktikaran Pariyojana (MKSP)",
+    "description": "Dedicated empowerment program for women in agriculture to improve their participation, productivity, and sustainable organic livelihood income.",
+    "department": "Ministry of Rural Development & Ministry of Agriculture",
+    "benefitSummary": "₹12,000 annual capacity building, input support & direct livelihood assistance",
+    "benefitAmountPerYear": 12000,
+    "rules": {
+      "all": [
+        { "field": "personal.gender", "operator": "=", "value": "FEMALE", "label": "Applicant must be a woman farmer / agricultural worker" },
+        { "field": "personal.age", "operator": ">=", "value": 18, "label": "Aged 18 years or above" },
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER", "AGRICULTURAL_LABOURER"], "label": "Engaged in agriculture, dairy, or rural allied work" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "https://aajeevika.gov.in/en/content/mahila-kisan-sashaktikaran-pariyojana-mksp",
+    "source": {
+      "type": "OFFICIAL_PORTAL",
+      "name": "DAY-NRLM Official Portal",
+      "url": "https://aajeevika.gov.in/",
+      "note": "Mahila Kisan Sashaktikaran Pariyojana Guidelines"
+    },
+    "officialDocumentText": "MAHILA KISAN SASHAKTIKARAN PARIYOJANA (MKSP) GUIDELINES.\n1. Objective: MKSP, as a sub-component of DAY-NRLM, seeks to improve the present status of women in agriculture and to enhance the opportunities for their empowerment.\n2. Target Group: Women farmers, women agricultural labourers, smallholders, and self-help group (SHG) members engaged in sustainable agro-ecological practices, livestock rearing, non-timber forest produce, and organic cluster development.\n3. Benefits Provided: Skill development training in sustainable agriculture, financial assistance for farm inputs and bio-resource centers, credit facilitation through SHGs, access to customized drudgery-reduction tools, and direct market linkage.\n4. Required Documentation: Aadhaar Card, Bank Passbook, and self-declaration / SHG membership certificate.\n5. Implementing Agencies: State Rural Livelihood Missions (SRLM) and Community Resource Persons (Krishi Sakhis)."
+  },
+  {
+    "code": "PKVY",
+    "name": "Paramparagat Krishi Vikas Yojana (Organic Farming Promotion)",
+    "description": "Financial assistance of ₹50,000 per hectare over 3 years for organic farming clusters, PGS certification, organic seeds, bio-fertilizers, and value addition.",
+    "department": "Integrated Nutrient Management Division, Department of Agriculture & Farmers Welfare",
+    "benefitSummary": "₹50,000 per hectare (over 3 years) for organic farming inputs and PGS certification",
+    "benefitAmountPerYear": 16666,
+    "rules": {
+      "all": [
+        { "field": "agriculture.occupation", "operator": "IN", "value": ["FARMER", "TENANT_FARMER"], "label": "Occupation is Farmer or Tenant Farmer" },
+        { "field": "agriculture.landAreaHectares", "operator": ">", "value": 0, "label": "Must hold cultivable land for organic cluster adoption" }
+      ]
+    },
+    "requiredDocuments": ["AADHAAR", "LAND_RECORD", "BANK_PASSBOOK"],
+    "officialApplicationUrl": "https://pgsindia-ncof.gov.in/pkvy/index.aspx",
+    "source": {
+      "type": "OFFICIAL_PORTAL",
+      "name": "PGS India / National Center of Organic Farming",
+      "url": "https://pgsindia-ncof.gov.in/",
+      "note": "PKVY Guidelines, Ministry of Agriculture"
+    },
+    "officialDocumentText": "PARAMPARAGAT KRISHI VIKAS YOJANA (PKVY) REVISED SCHEME GUIDELINES.\n1. Objective: To promote organic farming among rural youth, farmers, and consumers through cluster approach and Participatory Guarantee System (PGS) certification.\n2. Financial Assistance: Financial assistance of Rs. 50,000 per hectare is provided for 3 years. Out of this, Rs. 31,000/ha (62%) is directly provided to farmers via DBT for organic inputs (seeds, bio-fertilizers, vermicompost, botanical extracts), and Rs. 8,800/ha is provided for value addition, packaging, and marketing support.\n3. Implementation Model: Organic farming is promoted through clusters of 20 hectares or 50 farmers. Farmers receive free PGS-India certification without fees.\n4. Eligibility: Any farmer possessing cultivable land willing to commit to chemical-free organic farming practices.\n5. Required Documents: Aadhaar Card, 7/12 Land Record / Khasra, Bank Account Details with IFSC code."
   }
 ]

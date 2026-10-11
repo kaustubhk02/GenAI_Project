@@ -21,6 +21,13 @@ const schemeSchema = new mongoose.Schema({
     note: String,
   },
   version: { type: Number, default: 1 },
+  syncStatus: {
+    type: String,
+    enum: ['VERIFIED', 'REQUIRES_MANUAL_REVIEW', 'OUTDATED'],
+    default: 'VERIFIED',
+  },
+  pendingChanges: { type: mongoose.Schema.Types.Mixed, default: null },
+  lastSyncedAt: { type: Date, default: null },
   isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
