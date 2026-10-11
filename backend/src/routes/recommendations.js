@@ -25,6 +25,7 @@ router.get('/', asyncHandler(async (req, res) => {
       scheme: {
         id: s._id, code: s.code, name: s.name, description: s.description, department: s.department,
         benefitSummary: s.benefitSummary, benefitAmountPerYear: s.benefitAmountPerYear,
+        requiredDocuments: s.requiredDocuments || [], rules: s.rules,
         officialApplicationUrl: s.officialApplicationUrl, source: s.source, version: s.version,
       },
       status: r.status,
